@@ -1,0 +1,39 @@
+<h2>Lab Results</h2>
+
+@if (loading()) {
+  <p>Loading...</p>
+}
+
+@if (error()) {
+  <p>{{ error() }}</p>
+}
+
+@if (!loading() && products().length > 0) {
+
+<p>Total records: {{ products().length }}</p>
+
+<table class="results-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Station</th>
+      <th>Date</th>
+      <th>Temperature (°C)</th>
+      <th>pH</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (item of products(); track item.id) {
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.station_name }}</td>
+        <td>{{ item.sample_date }}</td>
+        <td>{{ item.temperature_c }}</td>
+        <td>{{ item.ph }}</td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+}
