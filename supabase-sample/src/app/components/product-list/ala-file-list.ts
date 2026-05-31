@@ -3,13 +3,13 @@ import { Component, inject, signal } from '@angular/core';
 import { SupabaseService } from '../../services/supabase';
 
 @Component({
-  selector: 'app-lab-results',
+  selector: 'app-ala-files',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './product-list.html',
+  templateUrl: './ala-file-list.html',
   styleUrls: ['./product-list.css'],
 })
-export class LabResults {
+export class AlaFileList {
   private readonly supabaseService = inject(SupabaseService);
 
   readonly products = signal<any[]>([]);
@@ -17,18 +17,15 @@ export class LabResults {
   readonly error = signal<string | null>(null);
 
   constructor() {
-    this.loadLabResults();
+    this.loadAlaFiles();
   }
 
-  private async loadLabResults(): Promise<void> {
+  private async loadAlaFiles(): Promise<void> {
     try {
-      const data = await this.supabaseService.getLabResults({
-        startDate: '2026-01-01',
-        endDate: '2026-01-30',
-      });
+      const data = await this.supabaseService.getAlaFiles();
       this.products.set(Array.isArray(data) ? data : []);
     } catch (err) {
-      this.error.set('Unable to load lab results.');
+      this.error.set('Unable to load ALA files.');
       console.error(err);
     } finally {
       this.loading.set(false);

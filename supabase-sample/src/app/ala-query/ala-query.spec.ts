@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LabResults } from './product-list';
+import { AlaQuery } from './ala-query';
 
-describe('LabResults', () => {
-  let component: LabResults;
-  let fixture: ComponentFixture<LabResults>;
+describe('AlaQuery', () => {
+  let component: AlaQuery;
+  let fixture: ComponentFixture<AlaQuery>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LabResults],
+      imports: [AlaQuery],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LabResults);
+    fixture = TestBed.createComponent(AlaQuery);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

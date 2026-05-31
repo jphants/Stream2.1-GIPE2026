@@ -105,8 +105,6 @@ def random_report():
     return f"MA{random.randint(1000000,9999999)}-MA{random.randint(1000000,9999999)}"
 
 def random_measure():
-    if random.random() < 0.3:
-        return f"< {round(random.uniform(0.00001, 10), 5)}"
     return round(random.uniform(0.001, 5000), 5)
 
 # Generate rows

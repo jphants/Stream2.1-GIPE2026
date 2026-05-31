@@ -1,9 +1,14 @@
+# CHECK README ON DB_EXPERIMENTS TO USE THE API
+
 # Stream2.1-GIPE2026
 
 This repository contains two main areas:
 
 - `supabase-sample`: an Angular sample application demonstrating how to connect to Supabase, fetch records from a table, and display them in a component.
-- `DB_experiments`: data documentation and sample generation tools for the water quality monitoring dataset.
+- `DB_experiments`: data documentation and sample generation tools for:
+  - Water quality monitoring dataset (WIP)
+  - ALA dataset 
+  - Satellite image processing (WIP)
 
 ## Repository structure
 
