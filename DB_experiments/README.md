@@ -1,115 +1,284 @@
 # DB Experiments
 
-This folder contains dataset documentation and instructions on how to query the API in Supabase.
+This folder contains database documentation and examples of how to query the Supabase API used by the ALA & Quilca Sustainable Agriculture Monitoring System.
 
-## Available tables
+---
 
-### Sensor readings
-Schema (columns):
+# Database Schema
 
-- `id` (integer): sequential identifier for each register
-- `timestamp` (ISO 8601 string): measurement datetime
-- `sensor_id` (string)
-- `water_level` (numeric)
-- `conductivity` (numeric)
-- `pH` (numeric)
-- `dissolved_oxygen` (numeric)
-- `turbidity` (numeric)
+## AGRICULTURAL_SITE
 
-Notes:
+Stores agricultural locations monitored by the platform.
 
-- Measurement fields are numeric values only. Any symbols such as `<`, `>`, or `~` have been removed from generated data so the fields contain plain numbers suitable for numeric queries and aggregations.
+### Columns
 
-### ALA results (FINAL DB WILL NOT HAVE THIS MANY VARIABLES, WAITING FOR STREAM 1.2 TO EVALUATE)
-This table contains analytical lab results with the following (representative) fields:
+| Column     | Type          | Description                   |
+| ---------- | ------------- | ----------------------------- |
+| site_id    | bigint        | Primary key                   |
+| site_name  | varchar(100)  | Site name                     |
+| region     | varchar(100)  | Administrative region         |
+| latitude   | decimal(10,7) | Latitude coordinate           |
+| longitude  | decimal(10,7) | Longitude coordinate          |
+| elevation  | float         | Elevation above sea level     |
+| land_area  | float         | Area of the agricultural land |
+| crop_type  | varchar(50)   | Main crop type                |
+| created_at | timestamptz   | Record creation timestamp     |
 
-- `Codigo`, `Nombre Punto`, `Fecha monitoreo`, `Hora Monitoreo`, `Nro del Informe del Ensayo análitico`, `Departamento`, `Punto`
-- FISICOS - QUIMICOS: `Aceites y Grasas`, `Amoniaco-N`, `Caudal`, `Cianuro WAD`, `Conductividad`, `Demanda Bioquímica de Oxígeno (DBO5)`, `Demanda Química de Oxígeno (DQO)`, `Fosfatos-P`, `Fósforo Total`, `Nitratos-N`, `Nitrógeno Total`, `Oxígeno Disuelto`, `pH`, `Sólidos Disueltos Totales`, `Sulfuros`, `Temperatura`
-- INORGANICOS: `Aluminio`, `Antimonio`, `Arsénico`, `Bario`, `Berilio`, `Bismuto`, `Boro`, `Cadmio`, `Calcio`, `Cerio`, `Cobalto`, `Cobre`, `Cromo Total`, `Estaño`, `Estroncio`, `Galio`, `Germanio`, `Hafnio`, `Hierro`, `Lantanio`, `Litio`, `Lutecio`, `Magnesio`, `Manganeso`, `Mercurio`, `Molibdeno`, `Niobio`, `Niquel`, `Plata`, `Plomo`, `Potasio`, `Rubidio`, `Selenio`, `Sodio`, `Talio`, `Tantalio`, `Teluro`, `Titanio`, `Torio`, `Uranio`, `Vanadio`, `Wolframio`, `Yterbio`, `Zinc`, `Zirconio`
-- MICROBIOLOGICO Y PARASITOLOGICOS: `Coliformes Termotolerantes`, `Coliformes Totales`
+---
 
-## Angular environment file
-Add your Supabase URL and anon key to `src/environments/environment.ts` like this:
+## WATER_ASSESSMENT
+
+Stores water quality and irrigation assessments for agricultural sites.
+
+### Columns
+
+| Column             | Type                                    |
+| ------------------ | --------------------------------------- |
+| assessment_id      | bigint                                  |
+| site_id            | bigint (FK → agricultural_site.site_id) |
+| assessment_date    | date                                    |
+| water_quality      | varchar(50)                             |
+| irrigation_status  | varchar(50)                             |
+| water_availability | varchar(50)                             |
+| notes              | text                                    |
+| created_at         | timestamptz                             |
+
+---
+
+## SENSOR_STATION
+
+Stores field sensor information.
+
+### Columns
+
+| Column            | Type                                    |
+| ----------------- | --------------------------------------- |
+| station_id        | bigint                                  |
+| site_id           | bigint (FK → agricultural_site.site_id) |
+| sensor_name       | varchar(100)                            |
+| sensor_type       | varchar(50)                             |
+| sensor_model      | varchar(50)                             |
+| installation_date | date                                    |
+| status            | varchar(30)                             |
+| created_at        | timestamptz                             |
+
+---
+
+## ALA_DATA_SCHEMA
+
+Stores metadata and standardization information used across datasets.
+
+### Columns
+
+| Column               | Type         |
+| -------------------- | ------------ |
+| schema_id            | bigint       |
+| data_source          | varchar(100) |
+| coordinate_system    | varchar(50)  |
+| measurement_unit     | varchar(50)  |
+| naming_standard      | varchar(100) |
+| georeference_method  | varchar(100) |
+| metadata_description | text         |
+
+---
+
+## FIELD_MEASUREMENT
+
+Stores environmental measurements generated by sensor stations.
+
+### Columns
+
+| Column         | Type                                    |
+| -------------- | --------------------------------------- |
+| measurement_id | bigint                                  |
+| station_id     | bigint (FK → sensor_station.station_id) |
+| schema_id      | bigint (FK → ala_data_schema.schema_id) |
+| recorded_at    | timestamptz                             |
+| soil_moisture  | float                                   |
+| temperature    | float                                   |
+| humidity       | float                                   |
+| rainfall       | float                                   |
+| ph_level       | float                                   |
+| created_at     | timestamptz                             |
+
+---
+
+## QA_QC_RECORD
+
+Stores quality assurance and validation records for measurements.
+
+### Columns
+
+| Column            | Type                                           |
+| ----------------- | ---------------------------------------------- |
+| qa_id             | bigint                                         |
+| measurement_id    | bigint (FK → field_measurement.measurement_id) |
+| checked_by        | uuid (FK → auth.users.id)                      |
+| validation_status | varchar(30)                                    |
+| checked_at        | timestamptz                                    |
+| remarks           | text                                           |
+
+---
+
+## SATELLITE_IMAGERY
+
+Stores satellite imagery metadata associated with monitored sites.
+
+### Columns
+
+| Column             | Type                                    |
+| ------------------ | --------------------------------------- |
+| imagery_id         | bigint                                  |
+| site_id            | bigint (FK → agricultural_site.site_id) |
+| schema_id          | bigint (FK → ala_data_schema.schema_id) |
+| capture_date       | date                                    |
+| satellite_provider | varchar(100)                            |
+| vegetation_index   | float                                   |
+| image_resolution   | varchar(30)                             |
+| imagery_path       | text                                    |
+| cloud_coverage     | float                                   |
+| created_at         | timestamptz                             |
+
+---
+
+# Authentication
+
+Authentication is handled through Supabase Auth.
+
+The application does not store passwords in custom tables.
+
+Authenticated users are available through:
+
+* auth.users
+* Supabase JWT authentication
+* Row Level Security (RLS) policies
+
+---
+
+# Angular Environment Configuration
+
+Create:
+
+src/environments/environment.ts
 
 ```ts
 export const environment = {
-  supabaseUrl: 'https://lcpcpuirgwpvjjapjlgb.supabase.co',
-  supabaseKey: 'YOUR_ANON_KEY_HERE',
+  supabaseUrl: 'YOUR_SUPABASE_URL',
+  supabaseKey: 'YOUR_SUPABASE_ANON_KEY',
 };
 ```
 
-## How to do queries
+---
 
-### Sample Angular service connecting to Supabase
-Install the official client:
+# Installing Supabase Client
 
 ```bash
 npm install @supabase/supabase-js
 ```
 
-Create a simple service that wraps the Supabase client:
+---
+
+# Example Angular Service
 
 ```ts
-// src/app/services/supabase.service.ts
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class SupabaseService {
+
   private supabase: SupabaseClient;
 
   constructor() {
-    this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
+    this.supabase = createClient(
+      environment.supabaseUrl,
+      environment.supabaseKey
+    );
   }
 
-  // Example: filters with one <, one >, one =
-  async queryWithThreeFilters() {
-    const { data, error } = await this.supabase
-      .from('sensor_readings')
-      .select('*')
-      .lt('water_level', 2.0)       // less than
-      .gt('conductivity', 300)     // greater than
-      .eq('sensor_id', 'SENSOR_001'); // equal
-    if (error) throw error;
-    return data;
+  async getSites() {
+    return await this.supabase
+      .from('agricultural_site')
+      .select('*');
   }
 
-  // Example: query for a given time interval
-  async queryForInterval(startIso: string, endIso: string) {
-    const { data, error } = await this.supabase
-      .from('sensor_readings')
+  async getSensorStations(siteId: number) {
+    return await this.supabase
+      .from('sensor_station')
       .select('*')
-      .gte('timestamp', startIso)
-      .lte('timestamp', endIso);
-    if (error) throw error;
-    return data;
+      .eq('site_id', siteId);
+  }
+
+  async getMeasurements(stationId: number) {
+    return await this.supabase
+      .from('field_measurement')
+      .select('*')
+      .eq('station_id', stationId)
+      .order('recorded_at', { ascending: false });
   }
 }
 ```
 
-### Usage from a component
+---
+
+# Query Examples
+
+## Retrieve measurements for a sensor station
 
 ```ts
-import { Component, OnInit } from '@angular/core';
-import { SupabaseService } from './services/supabase.service';
-
-@Component({ selector: 'app-root', template: '<pre>{{result | json}}</pre>' })
-export class AppComponent implements OnInit {
-  result: any;
-  constructor(private sb: SupabaseService) {}
-
-  async ngOnInit() {
-    // Three-filters example
-    this.result = await this.sb.queryWithThreeFilters();
-
-    // Interval example (ISO strings)
-    // const data = await this.sb.queryForInterval('2025-01-01T00:00:00Z', '2025-01-07T23:59:59Z');
-  }
-}
+const { data, error } = await supabase
+  .from('field_measurement')
+  .select('*')
+  .eq('station_id', 1);
 ```
 
-Notes:
+## Retrieve measurements within a time range
 
-- Replace `YOUR_ANON_KEY_HERE` with your Supabase anon/public key. Do not commit service keys or secret keys to source control.
-- The `sensor_readings` table stores numeric measurements; use numeric comparisons (`.lt`, `.gt`, `.eq`, `.gte`, `.lte`) for filters and aggregations.
+```ts
+const { data, error } = await supabase
+  .from('field_measurement')
+  .select('*')
+  .gte('recorded_at', '2026-01-01T00:00:00Z')
+  .lte('recorded_at', '2026-01-31T23:59:59Z');
+```
+
+## Retrieve all stations for a site
+
+```ts
+const { data, error } = await supabase
+  .from('sensor_station')
+  .select('*')
+  .eq('site_id', 1);
+```
+
+## Retrieve imagery for a site
+
+```ts
+const { data, error } = await supabase
+  .from('satellite_imagery')
+  .select('*')
+  .eq('site_id', 1);
+```
+
+## Retrieve QA/QC records for a measurement
+
+```ts
+const { data, error } = await supabase
+  .from('qa_qc_record')
+  .select('*')
+  .eq('measurement_id', 1);
+```
+
+---
+
+# Notes
+
+* All timestamps are stored in UTC.
+* Satellite image files should be stored in Supabase Storage.
+* The `imagery_path` field stores the path or URL to the stored asset.
+* Foreign key relationships are enforced by PostgreSQL.
+* Supabase automatically generates REST and realtime APIs for all tables.
+* RLS policies must be configured before production deployment.
