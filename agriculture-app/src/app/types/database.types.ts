@@ -142,43 +142,43 @@ export interface Database {
       }
 
       field_measurement: {
-        Row: {
-          measurement_id: number
-          station_id: number
-          schema_id: number | null
-          recorded_at: string
-          soil_moisture: number | null
-          temperature: number | null
-          humidity: number | null
-          rainfall: number | null
-          ph_level: number | null
-          created_at: string | null
-        }
-        Insert: {
-          measurement_id?: never
-          station_id: number
-          schema_id?: number | null
-          recorded_at: string
-          soil_moisture?: number | null
-          temperature?: number | null
-          humidity?: number | null
-          rainfall?: number | null
-          ph_level?: number | null
-          created_at?: string
-        }
-        Update: {
-          measurement_id?: never
-          station_id?: number
-          schema_id?: number | null
-          recorded_at?: string
-          soil_moisture?: number | null
-          temperature?: number | null
-          humidity?: number | null
-          rainfall?: number | null
-          ph_level?: number | null
-          created_at?: string
-        }
-      }
+  Row: {
+    measurement_id: number
+    station_id: number
+    schema_id: number | null
+    recorded_at: string
+    flowrate: number | null
+    temperature: number | null
+    conductivity: number | null
+    dissolved_oxygen: number | null
+    ph_level: number | null
+    created_at: string | null
+  }
+  Insert: {
+    measurement_id?: never
+    station_id: number
+    schema_id?: number | null
+    recorded_at: string
+    flowrate?: number | null
+    temperature?: number | null
+    conductivity?: number | null
+    dissolved_oxygen?: number | null
+    ph_level?: number | null
+    created_at?: string
+  }
+  Update: {
+    measurement_id?: never
+    station_id?: number
+    schema_id?: number | null
+    recorded_at?: string
+    flowrate?: number | null
+    temperature?: number | null
+    conductivity?: number | null
+    dissolved_oxygen?: number | null
+    ph_level?: number | null
+    created_at?: string
+  }
+}
 
       qa_qc_record: {
         Row: {
