@@ -12,7 +12,7 @@ export interface Database {
       agricultural_site: {
         Row: {
           site_id: number
-          site_name: string
+          site_name: string | null
           region: string | null
           latitude: number | null
           longitude: number | null
@@ -23,25 +23,25 @@ export interface Database {
         }
         Insert: {
           site_id?: never
-          site_name: string
+          site_name?: string | null
           region?: string | null
           latitude?: number | null
           longitude?: number | null
           elevation?: number | null
           land_area?: number | null
           crop_type?: string | null
-          created_at?: string
+          created_at?: string | null
         }
         Update: {
           site_id?: never
-          site_name?: string
+          site_name?: string | null
           region?: string | null
           latitude?: number | null
           longitude?: number | null
           elevation?: number | null
           land_area?: number | null
           crop_type?: string | null
-          created_at?: string
+          created_at?: string | null
         }
       }
 
@@ -75,11 +75,113 @@ export interface Database {
         }
       }
 
+      field_measurement: {
+        Row: {
+          measurement_id: number
+          station_id: number | null
+          schema_id: number | null
+          recorded_at: string | null
+          flowrate: number | null
+          temperature: number | null
+          conductivity: number | null
+          dissolved_oxygen: number | null
+          ph_level: number | null
+          nitrogeno_total: number | null
+          created_at: string | null
+        }
+        Insert: {
+          measurement_id?: never
+          station_id?: number | null
+          schema_id?: number | null
+          recorded_at?: string | null
+          flowrate?: number | null
+          temperature?: number | null
+          conductivity?: number | null
+          dissolved_oxygen?: number | null
+          ph_level?: number | null
+          nitrogeno_total?: number | null
+          created_at?: string | null
+        }
+        Update: {
+          measurement_id?: never
+          station_id?: number | null
+          schema_id?: number | null
+          recorded_at?: string | null
+          flowrate?: number | null
+          temperature?: number | null
+          conductivity?: number | null
+          dissolved_oxygen?: number | null
+          ph_level?: number | null
+          nitrogeno_total?: number | null
+          created_at?: string | null
+        }
+      }
+
+      qa_qc_record: {
+        Row: {
+          qa_id: number
+          measurement_id: number | null
+          validation_status: string | null
+          checked_by: string | null
+          created_at: string | null
+          remarks: string | null
+        }
+        Insert: {
+          qa_id?: never
+          measurement_id?: number | null
+          validation_status?: string | null
+          checked_by?: string | null
+          created_at?: string | null
+          remarks?: string | null
+        }
+        Update: {
+          qa_id?: never
+          measurement_id?: number | null
+          validation_status?: string | null
+          checked_by?: string | null
+          created_at?: string | null
+          remarks?: string | null
+        }
+      }
+
+      satellite_imagery: {
+        Row: {
+          imagery_id: number
+          site_id: number | null
+          x: number | null
+          y: number | null
+          rvi: number | null
+          r_nir_g: number | null
+          fecha: string | null
+          created_at: string | null
+        }
+        Insert: {
+          imagery_id?: never
+          site_id?: number | null
+          x?: number | null
+          y?: number | null
+          rvi?: number | null
+          r_nir_g?: number | null
+          fecha?: string | null
+          created_at?: string | null
+        }
+        Update: {
+          imagery_id?: never
+          site_id?: number | null
+          x?: number | null
+          y?: number | null
+          rvi?: number | null
+          r_nir_g?: number | null
+          fecha?: string | null
+          created_at?: string | null
+        }
+      }
+
       sensor_station: {
         Row: {
           station_id: number
-          site_id: number
-          sensor_name: string
+          site_id: number | null
+          sensor_name: string | null
           sensor_type: string | null
           sensor_model: string | null
           installation_date: string | null
@@ -88,31 +190,31 @@ export interface Database {
         }
         Insert: {
           station_id?: never
-          site_id: number
-          sensor_name: string
+          site_id?: number | null
+          sensor_name?: string | null
           sensor_type?: string | null
           sensor_model?: string | null
           installation_date?: string | null
           status?: string | null
-          created_at?: string
+          created_at?: string | null
         }
         Update: {
           station_id?: never
-          site_id?: number
-          sensor_name?: string
+          site_id?: number | null
+          sensor_name?: string | null
           sensor_type?: string | null
           sensor_model?: string | null
           installation_date?: string | null
           status?: string | null
-          created_at?: string
+          created_at?: string | null
         }
       }
 
       water_assessment: {
         Row: {
           assessment_id: number
-          site_id: number
-          assessment_date: string
+          site_id: number | null
+          assessment_date: string | null
           water_quality: string | null
           irrigation_status: string | null
           water_availability: string | null
@@ -121,128 +223,23 @@ export interface Database {
         }
         Insert: {
           assessment_id?: never
-          site_id: number
-          assessment_date: string
+          site_id?: number | null
+          assessment_date?: string | null
           water_quality?: string | null
           irrigation_status?: string | null
           water_availability?: string | null
           notes?: string | null
-          created_at?: string
+          created_at?: string | null
         }
         Update: {
           assessment_id?: never
-          site_id?: number
-          assessment_date?: string
+          site_id?: number | null
+          assessment_date?: string | null
           water_quality?: string | null
           irrigation_status?: string | null
           water_availability?: string | null
           notes?: string | null
-          created_at?: string
-        }
-      }
-
-      field_measurement: {
-  Row: {
-    measurement_id: number
-    station_id: number
-    schema_id: number | null
-    recorded_at: string
-    flowrate: number | null
-    temperature: number | null
-    conductivity: number | null
-    dissolved_oxygen: number | null
-    ph_level: number | null
-    created_at: string | null
-  }
-  Insert: {
-    measurement_id?: never
-    station_id: number
-    schema_id?: number | null
-    recorded_at: string
-    flowrate?: number | null
-    temperature?: number | null
-    conductivity?: number | null
-    dissolved_oxygen?: number | null
-    ph_level?: number | null
-    created_at?: string
-  }
-  Update: {
-    measurement_id?: never
-    station_id?: number
-    schema_id?: number | null
-    recorded_at?: string
-    flowrate?: number | null
-    temperature?: number | null
-    conductivity?: number | null
-    dissolved_oxygen?: number | null
-    ph_level?: number | null
-    created_at?: string
-  }
-}
-
-      qa_qc_record: {
-        Row: {
-          qa_id: number
-          measurement_id: number
-          checked_by: string
-          validation_status: string | null
-          checked_at: string | null
-          remarks: string | null
-        }
-        Insert: {
-          qa_id?: never
-          measurement_id: number
-          checked_by: string
-          validation_status?: string | null
-          checked_at?: string | null
-          remarks?: string | null
-        }
-        Update: {
-          qa_id?: never
-          measurement_id?: number
-          checked_by?: string
-          validation_status?: string | null
-          checked_at?: string | null
-          remarks?: string | null
-        }
-      }
-
-      satellite_imagery: {
-        Row: {
-          imagery_id: number
-          site_id: number
-          schema_id: number | null
-          capture_date: string | null
-          satellite_provider: string | null
-          vegetation_index: number | null
-          image_resolution: string | null
-          imagery_path: string | null
-          cloud_coverage: number | null
-          created_at: string | null
-        }
-        Insert: {
-          imagery_id?: never
-          site_id: number
-          schema_id?: number | null
-          capture_date?: string | null
-          satellite_provider?: string | null
-          vegetation_index?: number | null
-          image_resolution?: string | null
-          imagery_path?: string | null
-          cloud_coverage?: number | null
-          created_at?: string
-        }
-        Update: {
-          imagery_id?: never
-          site_id?: number
-          schema_id?: number | null
-          capture_date?: string | null
-          satellite_provider?: string | null
-          vegetation_index?: number | null
-          image_resolution?: string | null
-          imagery_path?: string | null
-          cloud_coverage?: number | null
-          created_at?: string
+          created_at?: string | null
         }
       }
     }
