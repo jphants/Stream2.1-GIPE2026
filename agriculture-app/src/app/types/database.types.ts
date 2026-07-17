@@ -75,6 +75,72 @@ export interface Database {
         }
       }
 
+      sensor_station: {
+        Row: {
+          station_id: number
+          site_id: number | null
+          sensor_name: string | null
+          sensor_type: string | null
+          sensor_model: string | null
+          installation_date: string | null
+          status: string | null
+          created_at: string | null
+        }
+        Insert: {
+          station_id?: never
+          site_id?: number | null
+          sensor_name?: string | null
+          sensor_type?: string | null
+          sensor_model?: string | null
+          installation_date?: string | null
+          status?: string | null
+          created_at?: string | null
+        }
+        Update: {
+          station_id?: never
+          site_id?: number | null
+          sensor_name?: string | null
+          sensor_type?: string | null
+          sensor_model?: string | null
+          installation_date?: string | null
+          status?: string | null
+          created_at?: string | null
+        }
+      }
+
+      water_assessment: {
+        Row: {
+          assessment_id: number
+          site_id: number | null
+          assessment_date: string | null
+          water_quality: string | null
+          irrigation_status: string | null
+          water_availability: string | null
+          notes: string | null
+          created_at: string | null
+        }
+        Insert: {
+          assessment_id?: never
+          site_id?: number | null
+          assessment_date?: string | null
+          water_quality?: string | null
+          irrigation_status?: string | null
+          water_availability?: string | null
+          notes?: string | null
+          created_at?: string | null
+        }
+        Update: {
+          assessment_id?: never
+          site_id?: number | null
+          assessment_date?: string | null
+          water_quality?: string | null
+          irrigation_status?: string | null
+          water_availability?: string | null
+          notes?: string | null
+          created_at?: string | null
+        }
+      }
+
       field_measurement: {
         Row: {
           measurement_id: number
@@ -148,98 +214,35 @@ export interface Database {
         Row: {
           imagery_id: number
           site_id: number | null
-          x: number | null
-          y: number | null
-          rvi: number | null
-          r_nir_g: number | null
-          fecha: string | null
+          capture_date: string | null
           created_at: string | null
+          satellite_provider: string | null
+          vegetation_index: number | null
+          water_stress_index: number | null
+          image_resolution: string | null
+          imagery_path: string | null
         }
         Insert: {
           imagery_id?: never
           site_id?: number | null
-          x?: number | null
-          y?: number | null
-          rvi?: number | null
-          r_nir_g?: number | null
-          fecha?: string | null
+          capture_date?: string | null
           created_at?: string | null
+          satellite_provider?: string | null
+          vegetation_index?: number | null
+          water_stress_index?: number | null
+          image_resolution?: string | null
+          imagery_path?: string | null
         }
         Update: {
           imagery_id?: never
           site_id?: number | null
-          x?: number | null
-          y?: number | null
-          rvi?: number | null
-          r_nir_g?: number | null
-          fecha?: string | null
+          capture_date?: string | null
           created_at?: string | null
-        }
-      }
-
-      sensor_station: {
-        Row: {
-          station_id: number
-          site_id: number | null
-          sensor_name: string | null
-          sensor_type: string | null
-          sensor_model: string | null
-          installation_date: string | null
-          status: string | null
-          created_at: string | null
-        }
-        Insert: {
-          station_id?: never
-          site_id?: number | null
-          sensor_name?: string | null
-          sensor_type?: string | null
-          sensor_model?: string | null
-          installation_date?: string | null
-          status?: string | null
-          created_at?: string | null
-        }
-        Update: {
-          station_id?: never
-          site_id?: number | null
-          sensor_name?: string | null
-          sensor_type?: string | null
-          sensor_model?: string | null
-          installation_date?: string | null
-          status?: string | null
-          created_at?: string | null
-        }
-      }
-
-      water_assessment: {
-        Row: {
-          assessment_id: number
-          site_id: number | null
-          assessment_date: string | null
-          water_quality: string | null
-          irrigation_status: string | null
-          water_availability: string | null
-          notes: string | null
-          created_at: string | null
-        }
-        Insert: {
-          assessment_id?: never
-          site_id?: number | null
-          assessment_date?: string | null
-          water_quality?: string | null
-          irrigation_status?: string | null
-          water_availability?: string | null
-          notes?: string | null
-          created_at?: string | null
-        }
-        Update: {
-          assessment_id?: never
-          site_id?: number | null
-          assessment_date?: string | null
-          water_quality?: string | null
-          irrigation_status?: string | null
-          water_availability?: string | null
-          notes?: string | null
-          created_at?: string | null
+          satellite_provider?: string | null
+          vegetation_index?: number | null
+          water_stress_index?: number | null
+          image_resolution?: string | null
+          imagery_path?: string | null
         }
       }
     }
